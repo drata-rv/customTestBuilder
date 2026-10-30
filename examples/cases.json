@@ -1,0 +1,7 @@
+[
+  { "name": "key created 10 days ago",  "record": { "evidenceType": "api_key", "keyCreatedAt": "$days_ago(10)" },  "expect": "pass" },
+  { "name": "key created 90 days ago",  "record": { "evidenceType": "api_key", "keyCreatedAt": "$days_ago(90)" },  "expect": "pass" },
+  { "name": "key created 91 days ago",  "record": { "evidenceType": "api_key", "keyCreatedAt": "$days_ago(91)" },  "expect": "fail" },
+  { "name": "key with no creation date", "record": { "evidenceType": "api_key", "keyCreatedAt": null },            "expect": "fail" },
+  { "name": "old bucket is not scored",  "record": { "evidenceType": "bucket", "keyCreatedAt": "$days_ago(400)" }, "expect": "skip" }
+]

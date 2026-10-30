@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "evidenceType": { "type": "string", "enum": ["bucket", "api_key", "instance", "finding_summary"] },
+    "name": { "type": ["string", "null"] },
+    "versioning": { "type": ["string", "null"], "enum": ["Enabled", "Suspended", "Disabled", null] },
+    "keyCreatedAt": { "type": ["string", "null"], "format": "date-time" },
+    "publicIngressPorts": { "type": "array", "items": { "type": "number" } },
+    "mfaEnabled": { "type": ["boolean", "null"] },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "settings": {
+      "type": "object",
+      "properties": { "availabilityType": { "type": "string" }, "encrypted": { "type": "boolean" } }
+    },
+    "openCriticalCount": { "type": ["integer", "null"] },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "open": { "type": "boolean" },
+          "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+          "firstSeen": { "type": ["string", "null"], "format": "date-time" },
+          "slaBreached": { "type": ["boolean", "null"] }
+        }
+      }
+    }
+  }
+}

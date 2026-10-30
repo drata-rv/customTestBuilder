@@ -1,0 +1,23 @@
+{
+  "expect_test": "fail",
+  "cases": [
+    { "name": "fresh, no findings", "expect": "pass",
+      "record": { "evidenceType": "finding_summary", "generatedAt": "$now", "findings": [] } },
+    { "name": "fresh, open critical 10 days old", "expect": "pass",
+      "record": { "evidenceType": "finding_summary", "generatedAt": "$now",
+                  "findings": [{ "open": true, "severity": "critical", "firstSeen": "$days_ago(10)" }] } },
+    { "name": "fresh, open critical 45 days old", "expect": "fail",
+      "record": { "evidenceType": "finding_summary", "generatedAt": "$now",
+                  "findings": [{ "open": true, "severity": "critical", "firstSeen": "$days_ago(45)" }] } },
+    { "name": "fresh, closed critical 45 days old", "expect": "pass",
+      "record": { "evidenceType": "finding_summary", "generatedAt": "$now",
+                  "findings": [{ "open": false, "severity": "critical", "firstSeen": "$days_ago(45)" }] } },
+    { "name": "fresh, open high 45 days old", "expect": "pass",
+      "record": { "evidenceType": "finding_summary", "generatedAt": "$now",
+                  "findings": [{ "open": true, "severity": "high", "firstSeen": "$days_ago(45)" }] } },
+    { "name": "stale data", "expect": "fail",
+      "record": { "evidenceType": "finding_summary", "generatedAt": "$days_ago(5)", "findings": [] } },
+    { "name": "other record type", "expect": "skip",
+      "record": { "evidenceType": "bucket" } }
+  ]
+}

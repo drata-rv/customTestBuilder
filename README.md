@@ -1,8 +1,8 @@
 # customTestBuilder
 
-Describe a Drata Custom Test in plain English. Get the two JSON blobs (filter and condition) for the Advanced editor, checked by code before you paste them.
+Describe a Drata Custom Test in plain English and you get the two JSON blobs (filter and condition) for the Advanced editor that you can check by code before you deploy them.
 
-The idea: the model is good at turning words into JSON and bad at being sure the JSON is right. Code is the opposite. So the model drafts, and deterministic code proves.
+The idea: the model is good at turning words into JSON and bad at being sure the JSON is right. Code is the opposite. So the model drafts, and deterministic code validates.
 
 ```
  plain English ──► LLM + PROMPT.md ──► filter.json + condition.json
@@ -24,9 +24,8 @@ The idea: the model is good at turning words into JSON and bad at being sure the
 |---|---|
 | `PROMPT.md` | System prompt. Teaches the grammar, the two-blob shape, the traps (check in the filter, null fails, empty scope passes), and when to ask. Section 13 makes the model self-check. |
 | `ctb.py` | Offline, stdlib-only. `facts` / `prompt` build the prompt from your schema. `check` and `test` prove the JSON. Paste it into any code sandbox as-is. |
-| `validate_recipe.py` | Online. Sends the answer to Drata's validate-recipe endpoint. Validate only, creates nothing. |
+| `validate_recipe.py` | Online. Sends the answer to Drata's validate-recipe endpoint. |
 | `examples/` | A schema, two builder answers and their test cases. |
-| `tests/` | 37 unit tests. `python3 -m unittest discover -s tests` |
 
 ## Use
 
@@ -40,7 +39,7 @@ python3 ctb.py prompt --schema schema.json --notes "evidenceType separates recor
 python3 ctb.py check --schema schema.json --answer answer.md
 python3 ctb.py test  --answer answer.md --cases cases.json
 
-# 4. ask Drata (needs DRATA_API_KEY, optional DRATA_REGION=us|eu|apac)
+# 4. OPTIONAL ask Drata (needs DRATA_API_KEY, optional DRATA_REGION=us|eu|apac)
 python3 validate_recipe.py --workspace-id 1 --provider "My Connection" --resource "Employees" --answer answer.md
 ```
 
@@ -57,12 +56,5 @@ Three ways to run it, from lightest to strongest:
 
 Both exit 0 when clean, 1 on findings, so they work as gates in a loop or CI.
 
-## Checked so far
 
-- 37 unit tests pass.
-- `check` passes all 22 custom tests in the OCI, Vipr and Sophos connectors.
-- Agentic mode, two runs with a small model (one on a Vipr-style schema, one on a generic schema): both wrote test cases from the request first, then ran `check` and `test`. One of them caught a real mistake: its first draft let a null value pass a `notEqual` rule, `test` flagged it, and it added an `exist` rule. `check` now warns about that case up front. Two runs is a smoke test, not an eval.
-- `validate_recipe.py` has only been run against a local mock of the endpoint. Its route and body shape come from Drata's public API source. The first real run confirms it.
-- The 7-rule warning in `check` comes from earlier testing; Drata's docs state only the 70-line limit.
-
-Maintained by the Drata Solutions Architect team.
+Unsupported project by the Drata Solutions Architect team.
